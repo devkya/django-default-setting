@@ -11,6 +11,9 @@ django-environ = "*"
 djangorestframework = "*"
 django-extensions = "*"
 drf-yasg = "*"
+channels = {extras = ["daphne"], version = "*"}
+channels-redis = "*"
+daphne = "*"
 
 [dev-packages]
 
