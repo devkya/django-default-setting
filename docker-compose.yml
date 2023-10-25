@@ -1,7 +1,7 @@
 version: "3" # 또는 원하는 버전
 
 services:
-  server:
+  django_gunicorn:
     restart: always
     image: movie_server:server
     container_name: django_server
@@ -37,17 +37,19 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports: 
       - "5050:8080"
+    depends_on:
+      - db
 
   nginx:
     container_name: nginx
     image: nginx:latest
     ports: 
-      - 80:8080
+      - 80:80
     volumes:
       - ./nginx/nginx-setup.conf:/etc/nginx/nginx.conf:ro
       - ./server/staticfiles:/staticfiles
     depends_on:
-      - server
+      - django_gunicorn
       - daphne
   
   redis:
@@ -68,6 +70,6 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - server
+      - django_gunicorn
 
       
