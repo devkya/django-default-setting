@@ -1,14 +1,14 @@
 from pathlib import Path
 import environ
 import os
+from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-env = environ.Env()
-env.read_env(os.path.join(BASE_DIR, "env", ".env.base"))
+base_env = environ.Env()
+base_env.read_env(os.path.join(BASE_DIR, "env", "base.env"))
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = get_random_secret_key()
 
 # Application definition
 
@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "chat_temp",  # TODO: After development, delete this line.
+    "chat",  # TODO: After development, delete this line.
 ]
 
 MIDDLEWARE = [
