@@ -1,3 +1,7 @@
+### CUSTOM ###
+data/
+.DS_Store
+
 ### Django ###
 *.log
 *.pot
@@ -20,8 +24,7 @@ media
 # C extensions
 *.so
 
-# docker data
-data/
+
 
 # Distribution / packaging
 .Python
