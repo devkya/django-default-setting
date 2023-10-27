@@ -1,4 +1,4 @@
-# Dcoker 기본 세팅
+# Django & Dcoker 기본 세팅
 > 개발 및 서비스 환경을 보다 편리하게 사용하기 위해 기본적인 docker 세팅을 분리하였다. 
 
 ## pipenv 가상환경 설정
@@ -10,5 +10,5 @@
 1. `django-admin startproject server`
 2. `python manage.py startapp chat` : awgi.py 설정을 위한 앱
 
-...
-# django-default-setting
+
+추후 작성 예정 ...
