@@ -1,0 +1,10 @@
+# .dockerignore
+# Docker
+dockerfiles/
+# pipenv
+Pipfile
+Pipfile.lock
+
+# Environment
+env/
+*__pycache__/

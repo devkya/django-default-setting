@@ -1,0 +1,89 @@
+version: "3" # 또는 원하는 버전
+
+services:
+  prod-django:
+    restart: always
+    image: prod-django
+    container_name: prod-django
+    env_file:
+      - env/prod.env
+    volumes:
+      - .:/app
+    build: 
+      context: .
+      dockerfile: dockerfiles/django.Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - prod-db  
+
+  prod-daphne:
+    restart: always
+    image: prod-daphne
+    container_name: prod-daphne
+    env_file:
+      - env/prod.env
+    ports:
+      - "6000:6000"
+    build: 
+      context: .
+      dockerfile: dockerfiles/daphne.Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - prod-django
+
+  prod-db:
+    image: postgres:15.4-alpine
+    container_name: prod-db
+    restart: always
+    env_file:
+      - env/prod.env
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  prod-pgadmin4:
+    container_name: prod-pgadmin4
+    image: dpage/pgadmin4:latest
+    restart: always
+    env_file:
+      - env/prod.env
+    ports: 
+      - "5050:8080"
+    depends_on:
+      - prod-db
+
+  prod-nginx:
+    container_name: prod-nginx
+    image: nginx:latest
+    ports: 
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./server/staticfiles:/staticfiles
+    depends_on:
+      - prod-django
+      - prod-daphne
+      - prod-pgadmin4
+  
+  prod-redis:
+    image: redis:6.2.13-bookworm
+    container_name: prod-redis
+    ports:
+      - "6379:6379"
+
+# 추후 추가해야 함
+  # celery:
+  #   restart: always
+  #   build: 
+  #     context: .
+  #   command: celery -A core worker -l INFO
+  #   volumes:
+  #       - .:/app
+  #   container_name: celery
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - django_gunicorn
